@@ -7,6 +7,9 @@ environment:
   sdk: ^3.11.4
 
 dependencies:
+  flutter_riverpod: ^3.3.1
+  flutter_secure_storage: ^10.0.0
+  dart_nostr: ^9.2.5
   flutter:
     sdk: flutter
 
