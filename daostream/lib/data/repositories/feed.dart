@@ -1,20 +1,19 @@
-// lib/data/repositories/feed_repository.dart
-
 import '../../domain/entities/post.dart';
-import '../models/post.dart';
-import '../services/nostr.dart';
+import '../datasources/nostr_data_source.dart';
+import '../mappers/post_mapper.dart';
 
 class FeedRepository {
-  final NostrService _nostrService;
+  final NostrDataSource _nostrDataSource;
+  final PostMapper _postMapper;
 
-  FeedRepository(this._nostrService);
+  FeedRepository(
+    this._nostrDataSource, {
+    PostMapper? postMapper,
+  }) : _postMapper = postMapper ?? PostMapper();
 
   Stream<PostEntity> listenToManhuaFeed() {
-    
-    final streamBruta = _nostrService.startManhuaSubscription();
-
-    return streamBruta.map((nostrEvent) {
-      return PostModel.fromNostrEvent(nostrEvent);
-    });
+    final streamRaw = _nostrDataSource.subscribeManhuaContent();
+    return streamRaw.map(_postMapper.fromNostrEvent);
   }
 }
+
